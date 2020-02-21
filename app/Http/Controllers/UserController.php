@@ -14,7 +14,11 @@ class UserController extends Controller
      */
     public function index()
     {
-        return view('welcome');
+        $users = User::latest()->get();
+
+        return view('welcome', [
+            'users' => $users
+        ]);
     }
 
     /**
@@ -36,6 +40,8 @@ class UserController extends Controller
      */
     public function destroy(User $user)
     {
-        //
+        $user->delete();
+
+        return back();
     }
 }
