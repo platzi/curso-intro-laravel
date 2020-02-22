@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use App\Post;
 use App\Http\Requests\PostRequest;
 
+use Illuminate\Support\Facades\Storage;
+
 class PostController extends Controller
 {
     /**
@@ -55,17 +57,6 @@ class PostController extends Controller
     }
 
     /**
-     * Display the specified resource.
-     *
-     * @param  \App\Post  $post
-     * @return \Illuminate\Http\Response
-     */
-    public function show(Post $post)
-    {
-        //
-    }
-
-    /**
      * Show the form for editing the specified resource.
      *
      * @param  \App\Post  $post
@@ -105,6 +96,9 @@ class PostController extends Controller
      */
     public function destroy(Post $post)
     {
-        //
+        Storage::disk('public')->delete($post->image);
+        $post->delete();
+
+        return back()->with('status', 'Eliminado con éxito');
     }
 }
