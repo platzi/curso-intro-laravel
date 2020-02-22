@@ -13,4 +13,4 @@ use Illuminate\Http\Request;
 |
 */
 
-Route::apiResource('posts', 'Api\PostController');
+Route::apiResource('posts', 'Api\PostController')->middleware('auth:api');

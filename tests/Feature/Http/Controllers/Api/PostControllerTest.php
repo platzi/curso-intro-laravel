@@ -108,4 +108,13 @@ class PostControllerTest extends TestCase
             ]
         ])->assertStatus(200); //OK
     }
+
+    public function test_guest()
+    {
+        $this->json('GET',    '/api/posts')->assertStatus(401);
+        $this->json('POST',   '/api/posts')->assertStatus(401);
+        $this->json('GET',    '/api/posts/1000')->assertStatus(401);
+        $this->json('PUT',    '/api/posts/1000')->assertStatus(401);
+        $this->json('DELETE', '/api/posts/1000')->assertStatus(401);
+    }
 }
