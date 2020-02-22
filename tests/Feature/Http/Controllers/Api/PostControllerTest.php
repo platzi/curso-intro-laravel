@@ -7,6 +7,7 @@ use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 
 use App\User;
+use App\Post;
 
 class PostControllerTest extends TestCase
 {
@@ -39,5 +40,26 @@ class PostControllerTest extends TestCase
         //Estatus HTTP 422
         $response->assertStatus(422) 
             ->assertJsonValidationErrors('title');
+    }
+
+    public function test_show()
+    {
+        $user = factory(User::class)->create();
+        $post = factory(Post::class)->create();
+
+        $response = $this->actingAs($user, 'api')->json('GET', "/api/posts/$post->id"); //id = 1 
+
+        $response->assertJsonStructure(['id', 'title', 'created_at', 'updated_at'])
+            ->assertJson(['title' => $post->title])
+            ->assertStatus(200); //OK
+    }
+
+    public function test_404_show()
+    {
+        $user = factory(User::class)->create();
+
+        $response = $this->actingAs($user, 'api')->json('GET', '/api/posts/1000'); //id = 1 
+
+        $response->assertStatus(404); //OK
     }
 }
